@@ -1,0 +1,6 @@
+.idea/
+.vscode/
+.cache/
+*.mp4
+.DS_Store
+build/
