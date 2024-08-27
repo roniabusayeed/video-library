@@ -37,7 +37,7 @@ video_lib = library(
 	include_directories: include_directories,
 	sources: sources,
 	dependencies: ffmpeg_dep,
-	install: true
+	install: true  # required to build current archive instead of thin archive.
 )
 
 # Expose dependency for using this project as a subproject.
