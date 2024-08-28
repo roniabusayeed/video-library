@@ -17,7 +17,7 @@ extern "C" {
  * The VideoDecoder class provides functionality to open a video file, decode video frames,
  * convert frames to RGB format, retrieve timestamps, and perform precise seeking within the
  * video stream. It manages the lifecycle of the underlying FFmpeg structures and provides a
- * simple interface for m_frame retrieval.
+ * simple interface for frame retrieval.
  */
 class VideoDecoder {
     AVFormatContext *m_format_context;
