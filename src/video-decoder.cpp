@@ -121,9 +121,15 @@ VideoDecoder::~VideoDecoder() {
  * @return Total duration of the video stream in microseconds.
  */
 [[nodiscard]] int64_t VideoDecoder::getTotalDuration() const {
+    const AVStream* stream = getStream();
+    if (stream->duration == AV_NOPTS_VALUE || stream->duration < 0) {
+        
+        // Fallback to format context duration if stream duration is invalid.
+        return m_format_context->duration;
+    }
     return av_rescale_q(
-        getStream()->duration,
-        getStream()->time_base,
+        stream->duration,
+        stream->time_base,
         {1, AV_TIME_BASE}
     );
 }
