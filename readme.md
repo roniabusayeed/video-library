@@ -38,3 +38,43 @@ Additionally, when using this library in your applications, ensure you link agai
 If your project's build system is [Meson](https://mesonbuild.com/), then you can simply add this entire project as a subproject to your own [Meson](https://mesonbuild.com/) project since this library is also developed as a [Meson](https://mesonbuild.com/) project.
 
 Please refer to [Meson Subprojects](https://mesonbuild.com/Subprojects.html) documentation for more information.
+
+## Code Example
+```C++
+#include <iostream>
+
+#include <video-decoder.h>
+#include <video-encoder.h>
+
+int main() {
+    VideoDecoder video_decoder("input.mkv");
+
+    VideoEncoder video_encoder(
+        "output.mp4",
+        video_decoder.getHeight(),
+        video_decoder.getWidth(),
+        video_decoder.getFPS(),
+        video_decoder.getBitrate()
+    );
+
+    std::cout << video_decoder.getWidth() << std::endl;
+    std::cout << video_decoder.getHeight() << std::endl;
+    std::cout << video_decoder.getFPS() << std::endl;
+    std::cout << video_decoder.getBitrate() << std::endl;
+    std::cout << video_decoder.getTotalDuration() << std::endl;
+    
+    int64_t total_duration = video_decoder.getTotalDuration();
+    video_decoder.seekToTimestamp(total_duration * 0.5);
+
+    uint8_t* rgb_buffer = new uint8_t[video_decoder.getHeight() * video_decoder.getWidth() * 3];
+    int64_t pts = 0;
+
+    while (pts < 0.55 * total_duration) {
+        video_decoder.getNextFrame(rgb_buffer, &pts);
+        video_encoder.encodeFrame(rgb_buffer, video_decoder.getWidth(), video_decoder.getHeight());
+    }
+    
+    video_encoder.finalize();
+    delete[] rgb_buffer;
+} 
+```
